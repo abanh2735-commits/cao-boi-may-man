@@ -261,9 +261,21 @@ const reels = document.getElementById("reels");
 // =========================
 
 function randomSymbol() {
-    return symbols[
-        Math.floor(Math.random() * symbols.length)
-    ];
+    const weights = symbols.map((_, i) =>
+        i === 0 ? 0.5 : 0.5 / (symbols.length - 1)
+    );
+
+    let r = Math.random();
+
+    for (let i = 0; i < symbols.length; i++) {
+        r -= weights[i];
+
+        if (r < 0) {
+            return symbols[i];
+        }
+    }
+
+    return symbols[0];
 }
 
 function createGrid() {
@@ -401,10 +413,10 @@ function calculateWin(grid) {
 
         if (count >= 3) {
 
-            let multiplier = 3;
+            let multiplier = 10;
 
-            if (count === 4) multiplier = 8;
-            if (count === 5) multiplier = 20;
+            if (count === 2) multiplier = 20;
+            if (count === 3) multiplier = 50;
 
             reward += bet * multiplier;
 
