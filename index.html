@@ -67,6 +67,12 @@ h1 {
     justify-content: center;
     font-size: clamp(25px, 7vw, 38px);
 }
+.person-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
 
 .cell.win {
     animation: glow .4s infinite alternate;
@@ -239,8 +245,12 @@ button:disabled {
 // =========================
 
 const symbols = [
-    "🤠", "⭐", "🔫", "🍾", "🃏",
-    "A", "K", "Q", "J", "💎"
+    "nguoi1.jpg",
+    "nguoi2.jpg",
+    "nguoi3.jpg",
+    "nguoi4.jpg",
+    "nguoi5.jpg"
+];
 ];
 
 let balance = 1000;
@@ -309,7 +319,7 @@ function drawGrid(grid) {
             let cell = document.createElement("div");
 
             cell.className = "cell";
-            cell.textContent = symbol;
+            cell.cell.innerHTML = `<img src="images/${symbol}" class="person-img" alt="Ảnh">`;
 
             cell.id = `cell-${r}-${c}`;
 
