@@ -1,677 +1,1448 @@
-
-<!DOCTYPE html>
-<html lang="vi">
+<!DOCTYPE html><html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cao Bồi May Mắn</title>
-
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    background: radial-gradient(#98602e, #241006);
-    font-family: Georgia, serif;
-    color: #ffe4a1;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.game {
-    width: 430px;
-    max-width: 96%;
-    padding: 14px;
-    border: 5px solid #b87932;
-    border-radius: 20px;
-    background: linear-gradient(#70401e, #241208);
-    box-shadow: 0 0 35px #000;
-}
-
-h1 {
-    text-align: center;
-    color: gold;
-    text-shadow: 2px 3px #542300;
-}
-
-.multiplier {
-    text-align: center;
-    padding: 12px;
-    background: #46230e;
-    border: 2px solid #bd873e;
-    font-size: 21px;
-    color: gold;
-}
-
-.reels {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 5px;
-    padding: 8px;
-    margin-top: 12px;
-    background: #160b05;
-    border: 3px solid #bd873e;
-}
-
-.cell {
-    aspect-ratio: 1;
-    background: linear-gradient(#ffe9b2, #b77a35);
-    border: 2px solid #78451e;
-    border-radius: 7px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: clamp(25px, 7vw, 38px);
-}
-.person-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-    display: block;
-
-.cell.win {
-    animation: glow .4s infinite alternate;
-}
-
-@keyframes glow {
-    from { transform: scale(1); filter: brightness(1); }
-    to { transform: scale(1.12); filter: brightness(1.7); }
-}
-
-.info {
-    display: flex;
-    justify-content: space-between;
-    gap: 5px;
-    margin: 12px 0;
-}
-
-.info div {
-    background: #321b0c;
-    border: 1px solid #b87932;
-    border-radius: 8px;
-    padding: 9px 4px;
-    text-align: center;
-    flex: 1;
-    font-size: 13px;
-}
-
-.controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 14px;
-}
-
-button {
-    cursor: pointer;
-    color: white;
-    background: linear-gradient(#b86a24, #612608);
-    border: 2px solid gold;
-    border-radius: 12px;
-    padding: 12px 18px;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-button:active {
-    transform: scale(.95);
-}
-
-button:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
-
-#spin {
-    width: 85px;
-    height: 85px;
-    border-radius: 50%;
-    font-size: 29px;
-    background: radial-gradient(#ffdf7d, #b64e0a);
-    color: #421c06;
-}
-
-.message {
-    text-align: center;
-    min-height: 35px;
-    margin: 12px 0;
-    padding: 8px;
-    background: #48250f;
-    border: 2px solid #b87932;
-}
-
-.extra {
-    display: flex;
-    gap: 5px;
-    margin-top: 12px;
-}
-
-.extra button {
-    flex: 1;
-    font-size: 12px;
-    padding: 10px 3px;
-}
-
-.panel {
-    display: none;
-    background: #211006;
-    border: 1px solid gold;
-    padding: 10px;
-    margin-top: 10px;
-    max-height: 160px;
-    overflow: auto;
-    font-size: 13px;
-}
-
-.panel.show {
-    display: block;
-}
-
-.panel p {
-    border-bottom: 1px solid #79502a;
-    padding-bottom: 5px;
-}
-
-.note {
-    font: 11px Arial;
-    text-align: center;
-    color: #e6c99a;
-    margin-top: 12px;
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> GAME BAO BỊP - Slot Nổ Hũ Bounty</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            light: '#fde68a',
+                            DEFAULT: '#f59e0b',
+                            dark: '#92400e',
+                        },
+                        casino: {
+                            bg: '#1c0f07',
+                            card: '#2d180c',
+                            panel: '#3f2212',
+                            border: '#d97706'
+                        }
+                    },
+                    boxShadow: {
+                        'neon-gold': '0 0 15px rgba(245, 158, 11, 0.6), inset 0 0 10px rgba(245, 158, 11, 0.4)',
+                        'neon-red': '0 0 20px rgba(220, 38, 38, 0.8)',
+                        'neon-blue': '0 0 20px rgba(217, 119, 6, 0.8)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Inter & Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Rye&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: radial-gradient(circle at center, #451a03 0%, #170902 100%);
+            color: #fff;
+            user-select: none;
+            overflow-x: hidden;
+        }
+        .font-western {
+            font-family: 'Rye', serif;
+        }
+        .font-teko {
+            font-family: 'Teko', sans-serif;
+        }
+        /* Rustic Wooden & Leather Glass Frame */
+        .glass-panel {
+            background: rgba(41, 20, 8, 0.85);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(217, 119, 6, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        /* Dynamic Reel Strips */
+        .reel-window {
+            overflow: hidden;
+            position: relative;
+        }
+        .reel-container {
+            display: flex;
+            flex-direction: column;
+            will-change: transform;
+        }
+        .symbol-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+        .symbol-card.winning {
+            animation: pulseGlow 0.6s infinite alternate ease-in-out;
+            z-index: 10;
+        }
+        @keyframes pulseGlow {
+            0% { transform: scale(0.92); filter: drop-shadow(0 0 10px #ffd700); }
+            100% { transform: scale(1.08); filter: drop-shadow(0 0 25px #ffe57f); }
+        }
+        /* Shimmer Banner */
+        .gold-gradient-text {
+            background: linear-gradient(180deg, #fff 0%, #ffe57f 40%, #ffd700 70%, #996515 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .red-gradient-text {
+            background: linear-gradient(180deg, #ffffff 0%, #ff8888 40%, #ff0055 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Custom Scrollbar for Modal */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ffd700;
+            border-radius: 4px;
+        }
+    </style>
 </head>
+<body class="min-h-screen flex flex-col justify-between p-2 sm:p-4 select-none relative">
 
-<body>
+    <!-- FX Canvas (Particle layer for fireworks, win coins, floating stars) -->
+    <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
 
-<div class="game" id="game">
+    <!-- TOP HEADER: Jackpot Pools & Controls -->
+    <header class="w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 z-10">
+        <!-- Brand Title -->
+        <div class="flex items-center gap-2">
+            <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-amber-800 via-amber-400 to-yellow-600 p-0.5 shadow-neon-gold flex items-center justify-center border border-amber-200">
+                <span class="text-2xl">🤠</span>
+            </div>
+            <div>
+                <h1 class="text-xl md:text-2xl font-western tracking-wider gold-gradient-text uppercase leading-none">CAO BỒI MIỀN TÂY</h1>
+                <p class="text-[10px] text-amber-300 tracking-widest font-semibold uppercase mt-0.5">SĂN TIỀN THƯỞNG WILD WEST</p>
+            </div>
+        </div>
 
-<h1>🤠 CAO BỒI MAY MẮN</h1>
+        <!-- Jackpot Counter Display (Mini, Major, Grand) -->
+        <div class="flex items-center gap-2 sm:gap-4 w-full md:w-auto justify-center">
+            <!-- Mini Jackpot -->
+            <div class="glass-panel px-3 py-1 rounded-xl text-center border-amber-600/60 flex-1 md:flex-none min-w-[100px]">
+                <span class="text-[10px] text-amber-400 font-bold block uppercase tracking-wider">TRUY NÃ MINI</span>
+                <span id="jackpotMini" class="font-teko text-xl sm:text-2xl font-bold text-amber-300 tracking-wider">50,000</span>
+            </div>
+            <!-- Major Jackpot -->
+            <div class="glass-panel px-3 py-1 rounded-xl text-center border-orange-500/60 flex-1 md:flex-none min-w-[120px]">
+                <span class="text-[10px] text-orange-400 font-bold block uppercase tracking-wider">KHO BÁU MAJOR</span>
+                <span id="jackpotMajor" class="font-teko text-xl sm:text-2xl font-bold text-orange-300 tracking-wider">250,000</span>
+            </div>
+            <!-- Grand Jackpot (Highlight) -->
+            <div class="glass-panel px-4 py-1.5 rounded-xl text-center border-red-600 shadow-neon-red bg-gradient-to-b from-red-950/90 to-amber-950/90 flex-1 md:flex-none min-w-[150px]">
+                <div class="flex items-center justify-center gap-1">
+                    <span class="text-xs text-red-400 font-black tracking-widest uppercase animate-pulse">💥 NỔ HŨ GRAND 💥</span>
+                </div>
+                <span id="jackpotGrand" class="font-teko text-2xl sm:text-3xl font-extrabold red-gradient-text tracking-wider">1,250,000</span>
+            </div>
+        </div>
 
-<div class="multiplier">
-    ✦ x10 &nbsp; ★ x20 &nbsp; ✦ x50 &nbsp; ✦ x100
-</div>
+        <!-- Quick Utility Buttons -->
+        <div class="flex items-center gap-2">
+            <button id="audioBtn" class="p-2.5 rounded-xl glass-panel hover:bg-amber-500/20 text-amber-300 transition" title="Âm thanh (Bật/Tắt)">
+                <svg id="audioIcon" class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            </button>
+            <button id="paytableBtn" class="p-2.5 rounded-xl glass-panel hover:bg-amber-500/20 text-amber-300 transition font-black" title="Hướng dẫn & Bảng trả thưởng">
+                ?
+            </button>
+        </div>
+    </header>
 
-<div class="reels" id="reels"></div>
+    <!-- MAIN GAME AREA (5 REELS x 3 ROWS) -->
+    <main class="w-full max-w-5xl mx-auto my-auto relative p-2 sm:p-4 my-2">
+        
+        <!-- FREE SPINS ACTIVE BANNER -->
+        <div id="freeSpinBanner" class="hidden absolute -top-5 left-1/2 -translate-x-1/2 z-30 bg-gradient-to-r from-amber-700 via-red-600 to-amber-700 px-6 py-1.5 rounded-full border-2 border-yellow-300 shadow-lg text-center animate-bounce">
+            <span class="text-xs sm:text-sm font-black text-white uppercase tracking-wider">
+                🧨 ĐẤU SÚNG MIỄN PHÍ: <span id="freeSpinLeftCount" class="text-yellow-300 font-teko text-xl">10</span> LƯỢT (NHÂN <span id="freeSpinMultiplierText" class="text-yellow-300">x3</span>) 🧨
+            </span>
+        </div>
 
-<div class="message" id="message">
-    CHÚC MÀY MAY MẮN!
-</div>
+        <!-- REELS BOARD FRAME (Wooden Saloon Frame) -->
+        <div class="relative glass-panel rounded-3xl p-3 sm:p-4 border-4 border-amber-600 shadow-2xl bg-gradient-to-b from-amber-950/95 via-stone-950/95 to-amber-950/95">
+            
+            <!-- PAYLINES SVG CONNECTORS OVERLAY -->
+            <svg id="paylineSvg" class="absolute inset-0 w-full h-full pointer-events-none z-20"></svg>
 
-<div class="info">
-    <div>Xu ảo<br><b id="balance">1000</b></div>
-    <div>Cược<br><b id="bet">10</b></div>
-    <div>Tổng thắng<br><b id="total">0</b></div>
-</div>
+            <!-- 5 REELS GRID CONTAINER -->
+            <div id="reelsBoard" class="grid grid-cols-5 gap-1.5 sm:gap-3 bg-stone-950/80 p-2 sm:p-3 rounded-2xl border-2 border-amber-700/50 overflow-hidden shadow-inner">
+                <!-- Reel 0 -->
+                <div class="reel-window h-48 sm:h-72 rounded-xl bg-gradient-to-b from-stone-900 via-amber-950/50 to-stone-900 border border-amber-700/40 shadow-inner">
+                    <div class="reel-container" id="reel-0"></div>
+                </div>
+                <!-- Reel 1 -->
+                <div class="reel-window h-48 sm:h-72 rounded-xl bg-gradient-to-b from-stone-900 via-amber-950/50 to-stone-900 border border-amber-700/40 shadow-inner">
+                    <div class="reel-container" id="reel-1"></div>
+                </div>
+                <!-- Reel 2 -->
+                <div class="reel-window h-48 sm:h-72 rounded-xl bg-gradient-to-b from-stone-900 via-amber-950/50 to-stone-900 border border-amber-700/40 shadow-inner">
+                    <div class="reel-container" id="reel-2"></div>
+                </div>
+                <!-- Reel 3 -->
+                <div class="reel-window h-48 sm:h-72 rounded-xl bg-gradient-to-b from-stone-900 via-amber-950/50 to-stone-900 border border-amber-700/40 shadow-inner">
+                    <div class="reel-container" id="reel-3"></div>
+                </div>
+                <!-- Reel 4 -->
+                <div class="reel-window h-48 sm:h-72 rounded-xl bg-gradient-to-b from-stone-900 via-amber-950/50 to-stone-900 border border-amber-700/40 shadow-inner">
+                    <div class="reel-container" id="reel-4"></div>
+                </div>
+            </div>
 
-<div class="controls">
-    <button id="minus">−</button>
-    <button id="spin">⟳</button>
-    <button id="plus">+</button>
-</div>
+            <!-- Glass reflection overlay -->
+            <div class="absolute inset-0 pointer-events-none rounded-3xl bg-gradient-to-tr from-transparent via-amber-200/5 to-transparent"></div>
+        </div>
+    </main>
 
-<div class="extra">
-    <button id="historyBtn">📜 Lịch sử</button>
-    <button id="statsBtn">📊 Thống kê</button>
-    <button id="fullBtn">⛶ Toàn màn hình</button>
-</div>
+    <!-- CONTROL PANEL (FOOTER) -->
+    <footer class="w-full max-w-5xl mx-auto glass-panel rounded-2xl p-3 sm:p-4 border-2 border-amber-500/40 z-10">
+        <div class="flex flex-wrap lg:flex-nowrap items-center justify-between gap-4">
+            
+            <!-- STATS: Balance & Last Win -->
+            <div class="flex items-center gap-3 sm:gap-6 w-full lg:w-auto justify-between lg:justify-start">
+                <!-- Balance -->
+                <div class="bg-black/40 px-4 py-2 rounded-xl border border-amber-500/30 min-w-[150px] flex items-center justify-between gap-3">
+                    <div>
+                        <span class="text-[10px] text-amber-400/80 font-bold block uppercase">SỐ DƯ (BALANCE)</span>
+                        <span id="balanceDisplay" class="font-teko text-2xl font-extrabold text-green-400 tracking-wider">10,000,000$</span>
+                    </div>
+                    <!-- TOP-UP BUTTON NEXT TO BALANCE -->
+                    <button id="openDepositBtn" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-500 via-green-400 to-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 active:scale-95 transition flex items-center gap-1 animate-pulse" title="Nạp thêm xu">
+                        <span>+ NẠP</span>
+                    </button>
+                </div>
+                <!-- Win -->
+                <div class="bg-black/40 px-4 py-2 rounded-xl border border-amber-500/30 min-w-[130px]">
+                    <span class="text-[10px] text-amber-400/80 font-bold block uppercase">TIỀN THẮNG (WIN)</span>
+                    <span id="winDisplay" class="font-teko text-2xl font-extrabold text-amber-300 tracking-wider">0$</span>
+                </div>
+            </div>
 
-<div class="panel" id="history">
-    <h3>LỊCH SỬ QUAY</h3>
-    <div id="historyList"></div>
-</div>
+            <!-- BET SELECTION -->
+            <div class="flex items-center justify-center gap-2 bg-black/40 p-2 rounded-xl border border-amber-500/30 w-full sm:w-auto">
+                <span class="text-xs text-amber-300 font-bold px-1 uppercase">CƯỢC:</span>
+                <button id="betSubBtn" class="w-8 h-8 rounded-lg bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 font-bold text-lg flex items-center justify-center border border-amber-500/50 active:scale-95 transition">-</button>
+                <div id="betDisplay" class="font-teko text-2xl font-bold text-yellow-400 min-w-[80px] text-center">10,000$</div>
+                <button id="betAddBtn" class="w-8 h-8 rounded-lg bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 font-bold text-lg flex items-center justify-center border border-amber-500/50 active:scale-95 transition">+</button>
+                <button id="betMaxBtn" class="px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-amber-600 to-yellow-500 text-black font-black text-xs uppercase hover:brightness-110 active:scale-95 transition ml-1">MAX</button>
+            </div>
 
-<div class="panel" id="stats">
-    <h3>THỐNG KÊ</h3>
-    <div id="statsList"></div>
-</div>
+            <!-- ACTION CONTROLS (Turbo, SPIN, Auto Spin) -->
+            <div class="flex items-center justify-center gap-3 w-full lg:w-auto">
+                <!-- TURBO TOGGLE -->
+                <button id="turboBtn" class="flex flex-col items-center justify-center px-3 py-2 rounded-xl bg-purple-950/60 border border-purple-500/40 text-purple-300 hover:border-purple-400 transition w-16">
+                    <span class="text-[9px] font-black uppercase">TURBO</span>
+                    <span id="turboStatus" class="text-xs font-bold text-gray-400">TẮT</span>
+                </button>
 
-<p class="note">
-    GAME DEMO GIẢI TRÍ - CHỈ SỬ DỤNG XU ẢO.
-    KHÔNG NẠP TIỀN, KHÔNG RÚT TIỀN.
-</p>
+                <!-- BIG SPIN BUTTON -->
+                <button id="spinBtn" class="relative group px-8 py-3.5 rounded-2xl bg-gradient-to-b from-yellow-300 via-amber-500 to-amber-700 border-2 border-yellow-200 shadow-neon-gold active:scale-95 transition duration-150 cursor-pointer overflow-hidden">
+                    <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition"></div>
+                    <span class="relative text-2xl font-extrabold text-slate-950 tracking-wider uppercase font-teko leading-none block">QUAY (SPIN)</span>
+                    <span class="text-[9px] text-slate-900 font-bold block uppercase tracking-widest text-center">Spacebar</span>
+                </button>
 
-</div>
+                <!-- AUTO SPIN TOGGLE -->
+                <button id="autoBtn" class="flex flex-col items-center justify-center px-3 py-2 rounded-xl bg-purple-950/60 border border-purple-500/40 text-purple-300 hover:border-purple-400 transition w-16">
+                    <span class="text-[9px] font-black uppercase">TỰ ĐỘNG</span>
+                    <span id="autoStatus" class="text-xs font-bold text-gray-400">TẮT</span>
+                </button>
+            </div>
 
-<script>
+        </div>
+    </footer>
 
-// =========================
-// 1. KHAI BÁO DỮ LIỆU
-// =========================
+    <!-- MODAL: BIG WIN / MEGA WIN / NỔ HŨ ANNOUNCEMENT -->
+    <div id="winModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md transition-all duration-300">
+        <div class="glass-panel p-8 rounded-3xl border-4 border-yellow-400 text-center max-w-lg w-11/12 shadow-2xl relative overflow-hidden transform scale-90 animate-fade-in">
+            <!-- Ray light effect -->
+            <div class="absolute -inset-20 bg-gradient-to-r from-amber-500/20 via-yellow-300/30 to-amber-500/20 animate-spin opacity-40 pointer-events-none"></div>
+            
+            <h2 id="winModalTitle" class="text-4xl sm:text-6xl font-black italic gold-gradient-text tracking-wider uppercase drop-shadow-lg mb-2">BIG WIN!</h2>
+            <p id="winModalSub" class="text-amber-200 font-bold text-sm tracking-widest uppercase mb-4">BẠN ĐÃ CHIẾN THẮNG LỚN</p>
+            
+            <div class="my-6">
+                <span id="winModalAmount" class="font-teko text-5xl sm:text-7xl font-extrabold text-yellow-300 tracking-wider drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">0$</span>
+            </div>
 
-const symbols = [
-    "92dc227d-e7c6-4327-8252-7c40acf0ed.jfif",
-"92dc227d-e7c6-4327-8252-7c40acf0ed.jfif",
-"92dc227d-e7c6-4327-8252-7c40acf0ed.jfif",
-"92dc227d-e7c6-4327-8252-7c40acf0ed.jfif",
-"92dc227d-e7c6-4327-8252-7c40acf0ed.jfif"
-];
+            <button id="winModalCloseBtn" class="relative z-10 px-8 py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-amber-600 text-slate-950 font-extrabold uppercase tracking-wider hover:brightness-110 active:scale-95 transition shadow-lg">
+                NHẬN THƯỞNG
+            </button>
+        </div>
+    </div>
 
+    <!-- MODAL: FREE SPINS TRIGGERED -->
+    <div id="freeSpinModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md">
+        <div class="glass-panel p-8 rounded-3xl border-4 border-amber-500 text-center max-w-md w-11/12 shadow-neon-red relative">
+            <div class="text-6xl mb-3 animate-bounce">🧨🧨🧨</div>
+            <h2 class="text-3xl sm:text-4xl font-western text-amber-400 uppercase tracking-wider mb-2">NỔ MÌN FREE SPINS!</h2>
+            <p class="text-gray-200 text-sm mb-4">Bạn kích hoạt <span id="fsCountAnnounce" class="text-yellow-300 font-bold text-xl">10</span> Lượt đấu súng miễn phí với Hệ số nhân <span id="fsMultiplierAnnounce" class="text-yellow-300 font-bold text-xl">x3</span>!</p>
+            <button id="fsStartBtn" class="px-8 py-3 rounded-xl bg-gradient-to-r from-amber-600 to-red-600 text-white font-extrabold uppercase tracking-wider hover:brightness-110 active:scale-95 transition shadow-lg">
+                RÚT SÚNG QUAY NGAY
+            </button>
+        </div>
+    </div>
 
-let balance = 1000;
-let bet = 10;
-let totalWin = 0;
+    <!-- MODAL: CỔNG NẠP XU SIÊU TỐC (TOP-UP / DEPOSIT SYSTEM) -->
+    <div id="depositModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-2 sm:p-4">
+        <div class="glass-panel p-5 sm:p-7 rounded-3xl border-2 border-emerald-400 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-4 border-b border-emerald-500/30 pb-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">💳</span>
+                    <h3 class="text-2xl font-extrabold text-emerald-400 uppercase tracking-wider">CỔNG NẠP XU SIÊU TỐC</h3>
+                </div>
+                <button id="depositCloseBtn" class="text-amber-400 font-bold text-2xl hover:text-white transition">&times;</button>
+            </div>
 
-let turns = 0;
-let wins = 0;
-let losses = 0;
+            <!-- Payment Method Tabs -->
+            <div class="flex border-b border-purple-800/60 mb-5 gap-1 sm:gap-2">
+                <button id="tabBank" class="pay-tab active-tab px-3 py-2 text-xs sm:text-sm font-bold rounded-t-xl bg-emerald-600 text-white border-t border-x border-emerald-400">
+                    🏦 Ngân Hàng (VietQR)
+                </button>
+                <button id="tabEWallet" class="pay-tab px-3 py-2 text-xs sm:text-sm font-bold rounded-t-xl bg-purple-900/40 text-gray-300 hover:text-white border-t border-x border-purple-700/40">
+                    📱 Ví (MoMo / ZaloPay)
+                </button>
+                <button id="tabCard" class="pay-tab px-3 py-2 text-xs sm:text-sm font-bold rounded-t-xl bg-purple-900/40 text-gray-300 hover:text-white border-t border-x border-purple-700/40">
+                    💳 Thẻ Cào
+                </button>
+                <button id="tabHistory" class="pay-tab px-3 py-2 text-xs sm:text-sm font-bold rounded-t-xl bg-purple-900/40 text-gray-300 hover:text-white border-t border-x border-purple-700/40 ml-auto">
+                    📜 Lịch Sử
+                </button>
+            </div>
 
-let spinning = false;
-let history = [];
+            <!-- TAB CONTENT: BANK & EWALLET -->
+            <div id="depositMainView" class="space-y-4">
+                <!-- Package Selection Grid -->
+                <div>
+                    <label class="text-xs font-bold text-amber-300 uppercase block mb-2">1. Chọn Gói Nạp (Kèm Thưởng VIP):</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                        <button class="pkg-card p-3 rounded-xl bg-purple-950/70 border border-emerald-500/40 hover:border-emerald-400 text-center relative transition group" data-amount="100000" data-bonus="10">
+                            <span class="absolute -top-2 right-1 px-1.5 py-0.5 rounded-full bg-emerald-500 text-[9px] font-extrabold text-black">+10% VIP</span>
+                            <div class="text-xs text-gray-300">Gói Nhập Môn</div>
+                            <div class="font-teko text-xl font-bold text-yellow-300">100,000$</div>
+                            <div class="text-[10px] text-emerald-400 font-semibold">Thực nhận: 110,000$</div>
+                        </button>
+                        <button class="pkg-card p-3 rounded-xl bg-purple-950/70 border border-emerald-500/40 hover:border-emerald-400 text-center relative transition group" data-amount="500000" data-bonus="20">
+                            <span class="absolute -top-2 right-1 px-1.5 py-0.5 rounded-full bg-emerald-500 text-[9px] font-extrabold text-black">+20% VIP</span>
+                            <div class="text-xs text-gray-300">Gói Cao Thủ</div>
+                            <div class="font-teko text-xl font-bold text-yellow-300">500,000$</div>
+                            <div class="text-[10px] text-emerald-400 font-semibold">Thực nhận: 600,000$</div>
+                        </button>
+                        <button class="pkg-card p-3 rounded-xl bg-purple-950/70 border border-emerald-500/40 hover:border-emerald-400 text-center relative transition group active-pkg" data-amount="1000000" data-bonus="30">
+                            <span class="absolute -top-2 right-1 px-1.5 py-0.5 rounded-full bg-amber-400 text-[9px] font-extrabold text-black">+30% HOT</span>
+                            <div class="text-xs text-gray-300">Gói Đại Gia</div>
+                            <div class="font-teko text-xl font-bold text-yellow-300">1,000,000$</div>
+                            <div class="text-[10px] text-emerald-400 font-semibold">Thực nhận: 1,300,000$</div>
+                        </button>
+                        <button class="pkg-card p-3 rounded-xl bg-purple-950/70 border border-emerald-500/40 hover:border-emerald-400 text-center relative transition group" data-amount="5000000" data-bonus="50">
+                            <span class="absolute -top-2 right-1 px-1.5 py-0.5 rounded-full bg-red-500 text-[9px] font-extrabold text-white animate-pulse">+50% VIP</span>
+                            <div class="text-xs text-gray-300">Gói Thần Tài</div>
+                            <div class="font-teko text-xl font-bold text-yellow-300">5,000,000$</div>
+                            <div class="text-[10px] text-emerald-400 font-semibold">Thực nhận: 7,500,000$</div>
+                        </button>
+                    </div>
+                </div>
 
-const reels = document.getElementById("reels");
+                <!-- Custom Amount Input -->
+                <div class="flex items-center gap-2 bg-black/40 p-2.5 rounded-xl border border-purple-700/50">
+                    <span class="text-xs text-amber-300 font-bold whitespace-nowrap">Tùy Chọn Số Tiền ($):</span>
+                    <input id="customDepositInput" type="number" min="10000" step="10000" placeholder="Nhập số tiền muốn nạp..." class="w-full bg-purple-950/80 text-yellow-300 font-teko text-xl px-3 py-1 rounded-lg border border-purple-500/40 focus:outline-none focus:border-amber-400">
+                </div>
 
-// =========================
-// 2. TẠO MÁY QUAY 5 CỘT
-// =========================
+                <!-- Payment Info Display & QR Code -->
+                <div class="bg-black/50 p-4 rounded-2xl border border-emerald-500/30 flex flex-col sm:flex-row items-center gap-4">
+                    <!-- Simulated QR Code SVG -->
+                    <div class="bg-white p-2 rounded-xl shadow-lg flex flex-col items-center shrink-0">
+                        <svg class="w-32 h-32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100" height="100" fill="white"/>
+                            <!-- Outer Corners -->
+                            <rect x="5" y="5" width="30" height="30" fill="black"/>
+                            <rect x="9" y="9" width="22" height="22" fill="white"/>
+                            <rect x="13" y="13" width="14" height="14" fill="black"/>
 
-function randomSymbol() {
-    const weights = symbols.map((_, i) =>
-        i === 0 ? 0.5 : 0.5 / (symbols.length - 1)
-    );
+                            <rect x="65" y="5" width="30" height="30" fill="black"/>
+                            <rect x="69" y="9" width="22" height="22" fill="white"/>
+                            <rect x="73" y="13" width="14" height="14" fill="black"/>
 
-    let r = Math.random();
+                            <rect x="5" y="65" width="30" height="30" fill="black"/>
+                            <rect x="9" y="69" width="22" height="22" fill="white"/>
+                            <rect x="13" y="73" width="14" height="14" fill="black"/>
 
-    for (let i = 0; i < symbols.length; i++) {
-        r -= weights[i];
+                            <!-- Simulated Data Modules -->
+                            <rect x="40" y="10" width="8" height="8" fill="black"/>
+                            <rect x="50" y="20" width="8" height="8" fill="black"/>
+                            <rect x="40" y="35" width="15" height="15" fill="#059669"/>
+                            <rect x="60" y="45" width="8" height="25" fill="black"/>
+                            <rect x="10" y="40" width="25" height="8" fill="black"/>
+                            <rect x="40" y="65" width="20" height="20" fill="black"/>
+                            <rect x="70" y="65" width="15" height="15" fill="#059669"/>
+                            <!-- Center Icon/Text -->
+                            <circle cx="50" cy="50" r="8" fill="#ffd700"/>
+                        </svg>
+                        <span class="text-[10px] font-bold text-slate-900 mt-1 uppercase">Quét VietQR Siêu Tốc</span>
+                    </div>
 
-        if (r < 0) {
-            return symbols[i];
+                    <!-- Transfer Details -->
+                    <div class="space-y-2 text-xs w-full">
+                        <div class="flex justify-between items-center bg-purple-950/60 p-2 rounded-lg border border-purple-800/40">
+                            <span class="text-gray-400">Ngân hàng:</span>
+                            <span id="depositBankName" class="font-bold text-emerald-300">MBBANK (Ngân Hàng Quân Đội)</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-purple-950/60 p-2 rounded-lg border border-purple-800/40">
+                            <span class="text-gray-400">Số tài khoản:</span>
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono font-bold text-yellow-300 text-sm">8888 9999 6868</span>
+                                <button class="copy-btn text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded hover:bg-amber-500/40" data-copy="888899996868">Coppy</button>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center bg-purple-950/60 p-2 rounded-lg border border-purple-800/40">
+                            <span class="text-gray-400">Chủ tài khoản:</span>
+                            <span class="font-bold text-white uppercase">SÒNG BÀI HOÀNG GIA VIP</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-purple-950/60 p-2 rounded-lg border border-purple-800/40">
+                            <span class="text-gray-400">Nội dung chuyển khoản:</span>
+                            <div class="flex items-center gap-2">
+                                <span id="depositCodeDisplay" class="font-mono font-extrabold text-emerald-400 text-sm">NAP888_93821</span>
+                                <button class="copy-btn text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded hover:bg-amber-500/40" data-copy-target="depositCodeDisplay">Coppy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Action Button -->
+                <button id="submitDepositBtn" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 via-green-400 to-amber-400 text-slate-950 font-black text-base uppercase tracking-wider hover:brightness-110 active:scale-95 transition shadow-neon-gold flex items-center justify-center gap-2">
+                    <span>⚡ XÁC NHẬN ĐÃ CHUYỂN KHOẢN / NẠP NGAY</span>
+                </button>
+            </div>
+
+            <!-- TAB CONTENT: SCRATCH CARD (Thẻ Cào) -->
+            <div id="depositCardView" class="hidden space-y-3">
+                <div class="bg-black/40 p-4 rounded-xl border border-purple-700/50 space-y-3">
+                    <div>
+                        <label class="text-xs font-bold text-amber-300 uppercase block mb-1">Chọn Nhà Mạng:</label>
+                        <select id="cardTelco" class="w-full bg-purple-950/90 text-white p-2.5 rounded-lg border border-purple-600 focus:outline-none">
+                            <option value="VIETTEL">Viettel (Khuyên Dùng - Nạp 1s)</option>
+                            <option value="VINAPHONE">Vinaphone</option>
+                            <option value="MOBIFONE">Mobifone</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-amber-300 uppercase block mb-1">Mã Thẻ (PIN):</label>
+                        <input id="cardPin" type="text" placeholder="Nhập mã số sau lớp bạc..." class="w-full bg-purple-950/90 text-yellow-300 font-mono p-2.5 rounded-lg border border-purple-600 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-amber-300 uppercase block mb-1">Số Seri Thẻ:</label>
+                        <input id="cardSeri" type="text" placeholder="Nhập số Seri in trên thẻ..." class="w-full bg-purple-950/90 text-yellow-300 font-mono p-2.5 rounded-lg border border-purple-600 focus:outline-none">
+                    </div>
+                    <p id="cardErrorMsg" class="hidden text-xs text-red-400 font-bold text-center">⚠️ Vui lòng nhập đầy đủ Mã Thẻ và Số Seri!</p>
+                    <button id="submitCardBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-sm uppercase hover:brightness-110 transition">
+                        NẠP THẺ CÀO NGAY
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: TRANSACTION HISTORY -->
+            <div id="depositHistoryView" class="hidden space-y-2">
+                <h4 class="text-xs font-bold text-amber-300 uppercase">Lịch Sử Nạp Xu Gần Đây:</h4>
+                <div id="historyListContainer" class="max-h-60 overflow-y-auto space-y-2">
+                    <p class="text-gray-400 text-xs italic text-center py-4">Chưa có giao dịch nạp tiền nào.</p>
+                </div>
+            </div>
+
+            <!-- SIMULATED PROCESSING SPINNER OVERLAY -->
+            <div id="depositProcessingOverlay" class="hidden absolute inset-0 bg-black/90 rounded-3xl flex flex-col items-center justify-center p-6 z-20">
+                <div class="w-16 h-16 border-4 border-emerald-400 border-t-transparent rounded-full animate-spin mb-4"></div>
+                <h4 class="text-xl font-bold text-emerald-300 uppercase animate-pulse">ĐANG XÁC NHẬN GIAO DỊCH...</h4>
+                <p class="text-xs text-gray-300 mt-2 text-center">Hệ thống ngân hàng tự động kiểm tra cú pháp chuyển khoản.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: LOW BALANCE ALERT -->
+    <div id="lowBalanceModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+        <div class="glass-panel p-6 rounded-3xl border-2 border-red-500 text-center max-w-sm w-11/12 shadow-neon-red">
+            <div class="text-5xl mb-2">💸</div>
+            <h3 class="text-2xl font-extrabold text-red-400 uppercase mb-2">SỐ DƯ KHÔNG ĐỦ!</h3>
+            <p class="text-xs text-gray-200 mb-5">Số dư hiện tại của bạn không đủ để thực hiện lượt quay. Hãy nạp thêm xu để tiếp tục săn **JACKPOT GRAND**!</p>
+            <div class="flex gap-2 justify-center">
+                <button id="lowBalanceCancelBtn" class="px-4 py-2 rounded-xl bg-gray-800 text-gray-300 font-bold text-xs hover:bg-gray-700">Để Sau</button>
+                <button id="lowBalanceDepositBtn" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 to-amber-400 text-slate-950 font-black text-xs uppercase shadow-lg hover:brightness-110">NẠP TIỀN NGAY</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PAYTABLE & RULES (?) -->
+    <div id="paytableModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+        <div class="glass-panel p-6 sm:p-8 rounded-3xl border-2 border-amber-500 max-w-2xl w-11/12 max-h-[85vh] overflow-y-auto relative">
+            <div class="flex items-center justify-between mb-4 border-b border-amber-500/30 pb-3">
+                <h3 class="text-2xl font-western gold-gradient-text uppercase">BẢNG TRUY NÃ & TRẢ THƯỞNG</h3>
+                <button id="paytableCloseBtn" class="text-amber-400 font-bold text-xl hover:text-white">&times;</button>
+            </div>
+            
+            <div class="space-y-4 text-sm text-gray-200">
+                <div class="bg-black/40 p-3 rounded-xl border border-amber-500/20">
+                    <h4 class="font-bold text-amber-300 uppercase mb-1">BIỂU TƯỢNG ĐẶC BIỆT MIỀN TÂY:</h4>
+                    <p class="mb-1"><span class="text-xl">🤠 WILD (CẢNH SÁT TRƯỞNG):</span> Thay thế tất cả biểu tượng (trừ Thuốc Nổ SCATO) để tạo hàng thắng lớn nhất.</p>
+                    <p><span class="text-xl">🧨 SCATO (THUỐC NỔ):</span> Xuất hiện 3+ quả ở bất kỳ đâu để kích hoạt Free Spins (3=10 FS x2, 4=15 FS x3, 5=20 FS x5).</p>
+                </div>
+
+                <div class="bg-black/40 p-3 rounded-xl border border-amber-500/20">
+                    <h4 class="font-bold text-amber-300 uppercase mb-2">BẢNG TRẢ THƯỞNG (HỆ SỐ X MỨC CƯỢC):</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
+                        <div class="p-2 bg-amber-950/60 rounded border border-amber-700/50">🔫 Súng Lục: 5x=100 | 4x=20 | 3x=5</div>
+                        <div class="p-2 bg-amber-950/60 rounded border border-amber-700/50">💰 Túi Vàng: 5x=50 | 4x=15 | 3x=3</div>
+                        <div class="p-2 bg-amber-950/60 rounded border border-amber-700/50">🐎 Ngựa Hoang: 5x=25 | 4x=8 | 3x=2</div>
+                        <div class="p-2 bg-amber-950/60 rounded border border-amber-700/50">🧲 Móng Ngựa: 5x=15 | 4x=5 | 3x=1.5</div>
+                        <div class="p-2 bg-amber-950/60 rounded border border-amber-700/50">🥃 Rượu Saloon: 5x=10 | 4x=3 | 3x=1</div>
+                        <div class="p-2 bg-amber-950/60 rounded border border-amber-700/50">🌵 Xương Rồng: 5x=5 | 4x=2 | 3x=0.5</div>
+                    </div>
+                </div>
+
+                <div class="bg-black/40 p-3 rounded-xl border border-amber-500/20">
+                    <h4 class="font-bold text-amber-300 uppercase mb-1">QUỸ THƯỞNG NỔ HŨ (JACKPOT):</h4>
+                    <p>• Quay trúng 5 biểu tượng 🔫 (Súng Lục Bạc) sẽ nổ **GRAND JACKPOT**!</p>
+                    <p>• Quay trúng 4 biểu tượng 🔫 nhận ngay **MAJOR JACKPOT**.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME ENGINE SCRIPT -->
+    <script>
+        /**
+         * SLOT MACHINE GAME LOGIC & AUDIO ENGINE - WILD WEST EDITION
+         */
+        
+        // --- 1. GAME DATA & CONFIGURATION (COWBOY WESTERN SYMBOLS) ---
+        const SYMBOLS = [
+            { id: 'CACTUS', icon: '🌵', weight: 30, payout: { 3: 0.5, 4: 2, 5: 5 } },
+            { id: 'WHISKEY', icon: '🥃', weight: 26, payout: { 3: 1, 4: 3, 5: 10 } },
+            { id: 'HORSESHOE', icon: '🧲', weight: 22, payout: { 3: 1.5, 4: 5, 5: 15 } },
+            { id: 'HORSE', icon: '🐎', weight: 16, payout: { 3: 2, 4: 8, 5: 25 } },
+            { id: 'GOLD_BAG', icon: '💰', weight: 12, payout: { 3: 3, 4: 15, 5: 50 } },
+            { id: 'REVOLVER', icon: '🔫', weight: 8, payout: { 3: 5, 4: 20, 5: 100 } },
+            { id: 'WILD', icon: '🤠', label: 'WILD', weight: 5, payout: { 3: 10, 4: 30, 5: 150 } },
+            { id: 'SCATTER', icon: '🧨', label: 'SCATO', weight: 4, payout: { 3: 2, 4: 5, 5: 10 } }
+        ];
+
+        // 20 Standard Paylines (5 Reels x 3 Rows)
+        const PAYLINES = [
+            [1, 1, 1, 1, 1], // Horizontal Middle
+            [0, 0, 0, 0, 0], // Horizontal Top
+            [2, 2, 2, 2, 2], // Horizontal Bottom
+            [0, 1, 2, 1, 0], // V-shape
+            [2, 1, 0, 1, 2], // Inverted V
+            [0, 0, 1, 2, 2], // Diagonal down
+            [2, 2, 1, 0, 0], // Diagonal up
+            [1, 0, 0, 0, 1], // Top dip
+            [1, 2, 2, 2, 1], // Bottom peak
+            [0, 1, 1, 1, 0], // Shallow V
+            [2, 1, 1, 1, 2], // Shallow inverted V
+            [1, 0, 1, 0, 1], // Zigzag 1
+            [1, 2, 1, 2, 1], // Zigzag 2
+            [0, 1, 0, 1, 0], // High Zigzag
+            [2, 1, 2, 1, 2], // Low Zigzag
+            [0, 2, 0, 2, 0], // Big Jump 1
+            [2, 0, 2, 0, 2], // Big Jump 2
+            [1, 1, 0, 1, 1], // Notch top
+            [1, 1, 2, 1, 1], // Notch bottom
+            [0, 2, 2, 2, 0]  // Wide U
+        ];
+
+        const BET_STEPS = [1000, 5000, 10000, 20000, 50000, 100000, 200000, 500000];
+
+        // --- 2. GAME STATE ---
+        let balance = 10000000;
+        let betIndex = 2; // Default 10,000$
+        let jackpotPools = {
+            mini: 50000,
+            major: 250000,
+            grand: 1250000
+        };
+        let isSpinning = false;
+        let isAuto = false;
+        let isTurbo = false;
+        let isMuted = false;
+        let freeSpinsLeft = 0;
+        let freeSpinMultiplier = 1;
+        let currentGrid = []; // 5x3 current visible symbols
+        let audioCtx = null;
+
+        // DOM Cache
+        const spinBtn = document.getElementById('spinBtn');
+        const autoBtn = document.getElementById('autoBtn');
+        const autoStatus = document.getElementById('autoStatus');
+        const turboBtn = document.getElementById('turboBtn');
+        const turboStatus = document.getElementById('turboStatus');
+        const audioBtn = document.getElementById('audioBtn');
+        const paytableBtn = document.getElementById('paytableBtn');
+        const paytableModal = document.getElementById('paytableModal');
+        const paytableCloseBtn = document.getElementById('paytableCloseBtn');
+        const balanceDisplay = document.getElementById('balanceDisplay');
+        const winDisplay = document.getElementById('winDisplay');
+        const betDisplay = document.getElementById('betDisplay');
+        const betAddBtn = document.getElementById('betAddBtn');
+        const betSubBtn = document.getElementById('betSubBtn');
+        const betMaxBtn = document.getElementById('betMaxBtn');
+        const paylineSvg = document.getElementById('paylineSvg');
+        const particleCanvas = document.getElementById('particleCanvas');
+
+        // Modal elements
+        const winModal = document.getElementById('winModal');
+        const winModalTitle = document.getElementById('winModalTitle');
+        const winModalSub = document.getElementById('winModalSub');
+        const winModalAmount = document.getElementById('winModalAmount');
+        const winModalCloseBtn = document.getElementById('winModalCloseBtn');
+        const freeSpinModal = document.getElementById('freeSpinModal');
+        const fsStartBtn = document.getElementById('fsStartBtn');
+        const freeSpinBanner = document.getElementById('freeSpinBanner');
+        const freeSpinLeftCount = document.getElementById('freeSpinLeftCount');
+        const freeSpinMultiplierText = document.getElementById('freeSpinMultiplierText');
+
+        // --- 3. AUDIO ENGINE (Web Audio API Synthesizer) ---
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
         }
-    }
 
-    return symbols[0];
-}
+        function playSound(type) {
+            if (isMuted) return;
+            initAudio();
+            if (!audioCtx) return;
 
-function createGrid() {
-    let grid = [];
+            const now = audioCtx.currentTime;
 
-    for (let r = 0; r < 4; r++) {
-        let row = [];
-
-        for (let c = 0; c < 5; c++) {
-            row.push(randomSymbol());
+            if (type === 'spin') {
+                // Short mechanic click
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.exponentialRampToValueAtTime(40, now + 0.08);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } 
+            else if (type === 'reelStop') {
+                // Thud sound
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(120, now);
+                osc.frequency.exponentialRampToValueAtTime(30, now + 0.1);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } 
+            else if (type === 'win') {
+                // Major triad arpeggio
+                [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                    gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.3);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.3);
+                });
+            } 
+            else if (type === 'scatter') {
+                // High magical chime
+                [600, 900, 1200, 1600].forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+                    gain.gain.setValueAtTime(0.25, now + idx * 0.06);
+                    gain.gain.linearRampToValueAtTime(0.01, now + idx * 0.06 + 0.25);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.06);
+                    osc.stop(now + idx * 0.06 + 0.25);
+                });
+            }
+            else if (type === 'jackpot') {
+                // Fanfare sound
+                const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+                    gain.gain.setValueAtTime(0.15, now + idx * 0.12);
+                    gain.gain.linearRampToValueAtTime(0.01, now + idx * 0.12 + 0.25);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.12);
+                    osc.stop(now + idx * 0.12 + 0.25);
+                });
+            }
+            else if (type === 'depositSuccess') {
+                // Cash register chime
+                [587.33, 880, 1174.66, 1760].forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+                    gain.gain.setValueAtTime(0.2, now + idx * 0.07);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.35);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.07);
+                    osc.stop(now + idx * 0.07 + 0.35);
+                });
+            }
         }
 
-        grid.push(row);
-    }
+        // --- 4. PARTICLE & FX ENGINE ---
+        const ctx = particleCanvas.getContext('2d');
+        let particles = [];
 
-    return grid;
-}
+        function resizeCanvas() {
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-// =========================
-// 3. HIỂN THỊ BIỂU TƯỢNG
-// =========================
+        class Particle {
+            constructor(x, y, color, speed, size, isCoin = false) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.size = size;
+                this.isCoin = isCoin;
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * speed + 2;
+                this.vx = Math.cos(angle) * velocity;
+                this.vy = Math.sin(angle) * velocity - (isCoin ? 4 : 0);
+                this.gravity = isCoin ? 0.35 : 0.12;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.015 + 0.01;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.2;
+            }
 
-function drawGrid(grid) {
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += this.gravity;
+                this.alpha -= this.decay;
+                this.rotation += this.rotationSpeed;
+            }
 
-    reels.innerHTML = "";
+            draw() {
+                if (this.alpha <= 0) return;
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
 
-    grid.forEach((row, r) => {
+                if (this.isCoin) {
+                    // Draw Gold Coin
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffd700';
+                    ctx.fill();
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#b8860b';
+                    ctx.stroke();
 
-        row.forEach((symbol, c) => {
+                    ctx.fillStyle = '#996515';
+                    ctx.font = `bold ${Math.floor(this.size * 1.1)}px Montserrat`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('$', 0, 1);
+                } else {
+                    // Draw Firework Spark
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = this.color;
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
 
-            let cell = document.createElement("div");
+                ctx.restore();
+            }
+        }
 
-            cell.className = "cell";
-            cell.cell.innerHTML = `<img src="images/${symbol}" class="person-img" alt="Ảnh">`;
+        function triggerCoinsBurst(count = 60) {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(centerX, centerY, '#ffd700', 16, Math.random() * 8 + 6, true));
+            }
+        }
 
-            cell.id = `cell-${r}-${c}`;
+        function triggerFireworks(count = 100) {
+            const colors = ['#ff0055', '#ffd700', '#00e5ff', '#ff9900', '#00ff66'];
+            for (let i = 0; i < count; i++) {
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * (window.innerHeight * 0.6);
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particles.push(new Particle(x, y, color, 12, Math.random() * 4 + 2, false));
+            }
+        }
 
-            reels.appendChild(cell);
+        function renderParticles() {
+            ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+            particles.forEach((p, idx) => {
+                p.update();
+                p.draw();
+                if (p.alpha <= 0) particles.splice(idx, 1);
+            });
+            requestAnimationFrame(renderParticles);
+        }
+        renderParticles();
 
+        // --- 5. REEL SETUP & GENERATION ---
+        const reelContainers = [
+            document.getElementById('reel-0'),
+            document.getElementById('reel-1'),
+            document.getElementById('reel-2'),
+            document.getElementById('reel-3'),
+            document.getElementById('reel-4')
+        ];
+
+        function getRandomSymbol() {
+            const totalWeight = SYMBOLS.reduce((sum, s) => sum + s.weight, 0);
+            let rnd = Math.random() * totalWeight;
+            for (const sym of SYMBOLS) {
+                if (rnd < sym.weight) return sym;
+                rnd -= sym.weight;
+            }
+            return SYMBOLS[0];
+        }
+
+        function createSymbolNode(sym) {
+            const div = document.createElement('div');
+            div.className = 'symbol-card h-16 sm:h-24 w-full flex-col justify-center items-center text-3xl sm:text-5xl select-none';
+            div.dataset.symbolId = sym.id;
+            
+            let labelHtml = '';
+            if (sym.label) {
+                labelHtml = `<span class="text-[9px] sm:text-[11px] font-black tracking-tighter text-yellow-300 drop-shadow">${sym.label}</span>`;
+            }
+            div.innerHTML = `<div>${sym.icon}</div>${labelHtml}`;
+            return div;
+        }
+
+        // Populate Initial Reels
+        function initReels() {
+            currentGrid = [];
+            for (let r = 0; r < 5; r++) {
+                reelContainers[r].innerHTML = '';
+                const col = [];
+                for (let row = 0; row < 3; row++) {
+                    const sym = getRandomSymbol();
+                    col.push(sym);
+                    reelContainers[r].appendChild(createSymbolNode(sym));
+                }
+                currentGrid.push(col);
+            }
+        }
+
+        // --- 6. SPIN & ANIMATION CONTROLLER ---
+        function formatCurrency(val) {
+            return val.toLocaleString('en-US') + '$';
+        }
+
+        function updateUI() {
+            balanceDisplay.textContent = formatCurrency(balance);
+            betDisplay.textContent = formatCurrency(BET_STEPS[betIndex]);
+            document.getElementById('jackpotMini').textContent = formatCurrency(Math.floor(jackpotPools.mini));
+            document.getElementById('jackpotMajor').textContent = formatCurrency(Math.floor(jackpotPools.major));
+            document.getElementById('jackpotGrand').textContent = formatCurrency(Math.floor(jackpotPools.grand));
+        }
+
+        async function spin() {
+            if (isSpinning) return;
+
+            const currentBet = BET_STEPS[betIndex];
+
+            // Handle Balance & Free Spins
+            if (freeSpinsLeft > 0) {
+                freeSpinsLeft--;
+                freeSpinLeftCount.textContent = freeSpinsLeft;
+                if (freeSpinsLeft === 0) {
+                    freeSpinBanner.classList.add('hidden');
+                }
+            } else {
+                if (balance < currentBet) {
+                    isAuto = false;
+                    autoStatus.textContent = 'TẮT';
+                    autoStatus.className = 'text-xs font-bold text-gray-400';
+                    document.getElementById('lowBalanceModal').classList.remove('hidden');
+                    return;
+                }
+                balance -= currentBet;
+                // Add fraction to Jackpot pools
+                jackpotPools.mini += currentBet * 0.005;
+                jackpotPools.major += currentBet * 0.003;
+                jackpotPools.grand += currentBet * 0.002;
+            }
+
+            isSpinning = true;
+            clearPaylines();
+            winDisplay.textContent = '0$';
+            updateUI();
+
+            // Setup Reel strips for spinning
+            const spinPromises = [];
+            const newGrid = [];
+
+            const durationBase = isTurbo ? 300 : 900;
+            const reelDelay = isTurbo ? 100 : 250;
+
+            for (let r = 0; r < 5; r++) {
+                const container = reelContainers[r];
+                const newCol = [getRandomSymbol(), getRandomSymbol(), getRandomSymbol()];
+                newGrid.push(newCol);
+
+                // Prepend spin strip symbols
+                const stripCount = isTurbo ? 10 : 20;
+                const fragment = document.createDocumentFragment();
+                for (let i = 0; i < stripCount; i++) {
+                    fragment.appendChild(createSymbolNode(getRandomSymbol()));
+                }
+                newCol.forEach(sym => fragment.appendChild(createSymbolNode(sym)));
+
+                container.insertBefore(fragment, container.firstChild);
+                
+                // Animate downward translation
+                const totalShift = (stripCount + 3) * (window.innerWidth < 640 ? 64 : 96);
+                container.style.transition = 'none';
+                container.style.transform = `translateY(-${totalShift}px)`;
+
+                spinPromises.push(new Promise(resolve => {
+                    setTimeout(() => {
+                        playSound('spin');
+                        container.style.transition = `transform ${durationBase + r * reelDelay}ms cubic-bezier(0.15, 0.9, 0.3, 1)`;
+                        container.style.transform = 'translateY(0px)';
+
+                        setTimeout(() => {
+                            playSound('reelStop');
+                            // Trim excess top nodes
+                            while (container.children.length > 3) {
+                                container.removeChild(container.lastChild);
+                            }
+                            resolve();
+                        }, durationBase + r * reelDelay);
+                    }, 50);
+                }));
+            }
+
+            await Promise.all(spinPromises);
+            currentGrid = newGrid;
+
+            // Evaluate Results
+            evaluateSpinResults();
+        }
+
+        // --- 7. WIN EVALUATION & PAYLINE CALCULATION ---
+        function evaluateSpinResults() {
+            const currentBet = BET_STEPS[betIndex];
+            let totalWin = 0;
+            const winningLines = [];
+            let scatterCount = 0;
+            let revolverCountTotal = 0;
+
+            // Count total scatters & revolvers for special events
+            for (let r = 0; r < 5; r++) {
+                for (let row = 0; row < 3; row++) {
+                    if (currentGrid[r][row].id === 'SCATTER') scatterCount++;
+                    if (currentGrid[r][row].id === 'REVOLVER') revolverCountTotal++;
+                }
+            }
+
+            // Check 20 Paylines
+            PAYLINES.forEach((linePattern, lineIdx) => {
+                const lineSymbols = linePattern.map((rowIdx, reelIdx) => currentGrid[reelIdx][rowIdx]);
+                
+                // Find first non-wild symbol
+                let baseSymbol = lineSymbols.find(s => s.id !== 'WILD' && s.id !== 'SCATTER');
+                if (!baseSymbol) baseSymbol = SYMBOLS.find(s => s.id === 'WILD');
+
+                let matchCount = 0;
+                for (let i = 0; i < 5; i++) {
+                    const current = lineSymbols[i];
+                    if (current.id === baseSymbol.id || current.id === 'WILD') {
+                        matchCount++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (matchCount >= 3 && baseSymbol.payout[matchCount]) {
+                    const mult = baseSymbol.payout[matchCount];
+                    let lineWin = currentBet * mult * (freeSpinsLeft > 0 ? freeSpinMultiplier : 1);
+                    totalWin += lineWin;
+                    winningLines.push({
+                        lineIdx,
+                        pattern: linePattern,
+                        matchCount,
+                        winAmount: lineWin
+                    });
+                }
+            });
+
+
+            // CHECK JACKPOT TRIGGERS (5x or 4x Revolvers)
+            let isJackpotWon = false;
+            let jackpotAmount = 0;
+
+            if (revolverCountTotal >= 5) {
+                isJackpotWon = true;
+                jackpotAmount = jackpotPools.grand;
+                jackpotPools.grand = 1250000; // Reset
+            } else if (revolverCountTotal === 4) {
+                isJackpotWon = true;
+                jackpotAmount = jackpotPools.major;
+                jackpotPools.major = 250000;
+            }
+
+            if (isJackpotWon) {
+                totalWin += jackpotAmount;
+            }
+
+            // ADD WIN TO BALANCE
+            balance += totalWin;
+            winDisplay.textContent = formatCurrency(totalWin);
+            updateUI();
+
+            // SCATTER / FREE SPINS CHECK
+            if (scatterCount >= 3) {
+                playSound('scatter');
+                let addedFs = 10;
+                let mult = 2;
+                if (scatterCount === 4) { addedFs = 15; mult = 3; }
+                if (scatterCount >= 5) { addedFs = 20; mult = 5; }
+
+                freeSpinsLeft += addedFs;
+                freeSpinMultiplier = mult;
+
+                // Open FS Modal
+                document.getElementById('fsCountAnnounce').textContent = addedFs;
+                document.getElementById('fsMultiplierAnnounce').textContent = 'x' + mult;
+                freeSpinModal.classList.remove('hidden');
+            }
+
+            // DRAW WINNING LINES & SHOW WIN MODALS
+            if (winningLines.length > 0) {
+                drawPaylines(winningLines);
+                highlightWinningCards(winningLines);
+
+                if (isJackpotWon) {
+                    playSound('jackpot');
+                    triggerFireworks(150);
+                    triggerCoinsBurst(100);
+                    showWinModal("NỔ HŨ GRAND!", "BẠN ĐÃ TRÚNG JACKPOT HOÀNG GIA!", totalWin);
+                } else if (totalWin >= currentBet * 30) {
+                    playSound('win');
+                    triggerFireworks(100);
+                    triggerCoinsBurst(80);
+                    showWinModal("SUPER WIN!", "BẠN ĐÃ THẮNG SIÊU LỚN!", totalWin);
+                } else if (totalWin >= currentBet * 15) {
+                    playSound('win');
+                    triggerCoinsBurst(50);
+                    showWinModal("MEGA WIN!", "BẠN ĐÃ THẮNG CỰC LỚN!", totalWin);
+                } else if (totalWin >= currentBet * 5) {
+                    playSound('win');
+                    triggerCoinsBurst(30);
+                    showWinModal("BIG WIN!", "BẠN ĐÃ THẮNG LỚN!", totalWin);
+                } else {
+                    playSound('win');
+                }
+            }
+
+            isSpinning = false;
+
+            // AUTO SPIN CONTINUATION
+            if ((isAuto || freeSpinsLeft > 0) && freeSpinModal.classList.contains('hidden')) {
+                setTimeout(() => {
+                    if (isAuto || freeSpinsLeft > 0) spin();
+                }, isTurbo ? 600 : 1200);
+            }
+        }
+
+        // --- 8. PAYLINE SVG CONNECTOR DRAWING ---
+        function clearPaylines() {
+            paylineSvg.innerHTML = '';
+            // Remove highlight classes
+            document.querySelectorAll('.symbol-card').forEach(el => el.classList.remove('winning'));
+        }
+
+        function drawPaylines(winningLines) {
+            clearPaylines();
+            const colors = ['#ffd700', '#00e5ff', '#ff0055', '#00ff66', '#ff9900', '#ab47bc'];
+
+            winningLines.forEach((win, index) => {
+                const color = colors[index % colors.length];
+                const points = [];
+
+                for (let r = 0; r < win.matchCount; r++) {
+                    const rowIdx = win.pattern[r];
+                    const reelEl = reelContainers[r];
+                    const cardEl = reelEl.children[rowIdx];
+                    
+                    if (cardEl) {
+                        const rect = cardEl.getBoundingClientRect();
+                        const boardRect = paylineSvg.getBoundingClientRect();
+                        const x = rect.left + rect.width / 2 - boardRect.left;
+                        const y = rect.top + rect.height / 2 - boardRect.top;
+                        points.push(`${x},${y}`);
+                    }
+                }
+
+                if (points.length > 1) {
+                    const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+                    polyline.setAttribute('points', points.join(' '));
+                    polyline.setAttribute('stroke', color);
+                    polyline.setAttribute('stroke-width', '5');
+                    polyline.setAttribute('fill', 'none');
+                    polyline.setAttribute('stroke-linecap', 'round');
+                    polyline.setAttribute('stroke-linejoin', 'round');
+                    polyline.setAttribute('filter', 'drop-shadow(0px 0px 8px ' + color + ')');
+                    polyline.classList.add('animate-pulse');
+                    paylineSvg.appendChild(polyline);
+                }
+            });
+        }
+
+        function highlightWinningCards(winningLines) {
+            winningLines.forEach(win => {
+                for (let r = 0; r < win.matchCount; r++) {
+                    const rowIdx = win.pattern[r];
+                    const card = reelContainers[r].children[rowIdx];
+                    if (card) card.classList.add('winning');
+                }
+            });
+        }
+
+        // --- 9. WIN MODAL COUNT-UP ANIMATION ---
+        function showWinModal(title, sub, targetAmount) {
+            winModalTitle.textContent = title;
+            winModalSub.textContent = sub;
+            winModalAmount.textContent = '0$';
+            winModal.classList.remove('hidden');
+
+            let current = 0;
+            const increment = targetAmount / 40;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= targetAmount) {
+                    current = targetAmount;
+                    clearInterval(timer);
+                }
+                winModalAmount.textContent = formatCurrency(Math.floor(current));
+            }, 30);
+        }
+
+        // --- 10. EVENT LISTENERS & USER INTERACTION ---
+        spinBtn.addEventListener('click', () => {
+            initAudio();
+            spin();
         });
 
-    });
+        // Keyboard Spacebar trigger
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !isSpinning && paytableModal.classList.contains('hidden')) {
+                e.preventDefault();
+                initAudio();
+                spin();
+            }
+        });
 
-}
+        // Bet Modifications
+        betAddBtn.addEventListener('click', () => {
+            if (betIndex < BET_STEPS.length - 1) {
+                betIndex++;
+                updateUI();
+                playSound('spin');
+            }
+        });
 
-// =========================
-// 4. CẬP NHẬT SỐ DƯ
-// =========================
+        betSubBtn.addEventListener('click', () => {
+            if (betIndex > 0) {
+                betIndex--;
+                updateUI();
+                playSound('spin');
+            }
+        });
 
-function update() {
+        betMaxBtn.addEventListener('click', () => {
+            betIndex = BET_STEPS.length - 1;
+            updateUI();
+            playSound('spin');
+        });
 
-    document.getElementById("balance").textContent =
-        balance.toLocaleString("vi-VN");
+        // Toggle Auto Spin
+        autoBtn.addEventListener('click', () => {
+            isAuto = !isAuto;
+            autoStatus.textContent = isAuto ? 'BẬT' : 'TẮT';
+            autoStatus.className = `text-xs font-bold ${isAuto ? 'text-green-400 animate-pulse' : 'text-gray-400'}`;
+            if (isAuto && !isSpinning) spin();
+        });
 
-    document.getElementById("bet").textContent = bet;
+        // Toggle Turbo Mode
+        turboBtn.addEventListener('click', () => {
+            isTurbo = !isTurbo;
+            turboStatus.textContent = isTurbo ? 'BẬT' : 'TẮT';
+            turboStatus.className = `text-xs font-bold ${isTurbo ? 'text-yellow-400' : 'text-gray-400'}`;
+        });
 
-    document.getElementById("total").textContent =
-        totalWin.toLocaleString("vi-VN");
+        // Audio Toggle
+        audioBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            audioBtn.classList.toggle('text-red-400', isMuted);
+            audioBtn.classList.toggle('text-amber-300', !isMuted);
+        });
 
-    document.getElementById("minus").disabled =
-        spinning || bet <= 10;
+        // Paytable Modal Controls
+        paytableBtn.addEventListener('click', () => paytableModal.classList.remove('hidden'));
+        paytableCloseBtn.addEventListener('click', () => paytableModal.classList.add('hidden'));
 
-    document.getElementById("plus").disabled =
-        spinning || bet >= 100 || bet + 10 > balance;
+        // Win Modal Close
+        winModalCloseBtn.addEventListener('click', () => winModal.classList.add('hidden'));
 
-    document.getElementById("spin").disabled =
-        spinning || balance < bet;
+        // Free Spin Modal Start
+        fsStartBtn.addEventListener('click', () => {
+            freeSpinModal.classList.add('hidden');
+            freeSpinBanner.classList.remove('hidden');
+            freeSpinLeftCount.textContent = freeSpinsLeft;
+            freeSpinMultiplierText.textContent = 'x' + freeSpinMultiplier;
+            if (!isSpinning) spin();
+        });
 
-}
+        // --- 11. IN-GAME TOP-UP / DEPOSIT SYSTEM LOGIC ---
+        let selectedDepositAmount = 1000000;
+        let selectedDepositBonus = 30;
+        let selectedMethod = 'Ngân Hàng (VietQR)';
+        let transactionHistory = [];
 
-// =========================
-// 5. ÂM THANH
-// =========================
+        const depositModal = document.getElementById('depositModal');
+        const openDepositBtn = document.getElementById('openDepositBtn');
+        const depositCloseBtn = document.getElementById('depositCloseBtn');
+        const lowBalanceModal = document.getElementById('lowBalanceModal');
+        const lowBalanceCancelBtn = document.getElementById('lowBalanceCancelBtn');
+        const lowBalanceDepositBtn = document.getElementById('lowBalanceDepositBtn');
 
-let audioContext;
+        const tabBank = document.getElementById('tabBank');
+        const tabEWallet = document.getElementById('tabEWallet');
+        const tabCard = document.getElementById('tabCard');
+        const tabHistory = document.getElementById('tabHistory');
 
-function sound(freq, duration = 0.12) {
+        const depositMainView = document.getElementById('depositMainView');
+        const depositCardView = document.getElementById('depositCardView');
+        const depositHistoryView = document.getElementById('depositHistoryView');
+        const depositProcessingOverlay = document.getElementById('depositProcessingOverlay');
 
-    try {
+        const depositBankName = document.getElementById('depositBankName');
+        const depositCodeDisplay = document.getElementById('depositCodeDisplay');
+        const customDepositInput = document.getElementById('customDepositInput');
+        const submitDepositBtn = document.getElementById('submitDepositBtn');
+        const submitCardBtn = document.getElementById('submitCardBtn');
 
-        audioContext = audioContext ||
-            new AudioContext();
-
-        let oscillator =
-            audioContext.createOscillator();
-
-        let gain = audioContext.createGain();
-
-        oscillator.frequency.value = freq;
-
-        gain.gain.setValueAtTime(
-            0.04,
-            audioContext.currentTime
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-            0.001,
-            audioContext.currentTime + duration
-        );
-
-        oscillator.connect(gain);
-        gain.connect(audioContext.destination);
-
-        oscillator.start();
-
-        oscillator.stop(
-            audioContext.currentTime + duration
-        );
-
-    } catch (error) {
-        console.log("Không phát được âm thanh");
-    }
-
-}
-
-// =========================
-// 6. TÍNH THƯỞNG
-// =========================
-
-function calculateWin(grid) {
-
-    let reward = 0;
-    let winningCells = [];
-
-    grid.forEach((row, r) => {
-
-        let count = 1;
-
-        while (
-            count < 5 &&
-            row[count] === row[0]
-        ) {
-            count++;
+        function generateTransactionCode() {
+            const randomNum = Math.floor(10000 + Math.random() * 90000);
+            return `NAP888_${randomNum}`;
         }
 
-        if (count >= 3) {
-
-            let multiplier = 10;
-
-            if (count === 2) multiplier = 20;
-            if (count === 3) multiplier = 50;
-
-            reward += bet * multiplier;
-
-            for (let c = 0; c < count; c++) {
-                winningCells.push([r, c]);
-            }
-
+        function openDeposit() {
+            initAudio();
+            depositCodeDisplay.textContent = generateTransactionCode();
+            depositModal.classList.remove('hidden');
+            lowBalanceModal.classList.add('hidden');
         }
 
-    });
+        openDepositBtn.addEventListener('click', openDeposit);
+        depositCloseBtn.addEventListener('click', () => depositModal.classList.add('hidden'));
+        lowBalanceCancelBtn.addEventListener('click', () => lowBalanceModal.classList.add('hidden'));
+        lowBalanceDepositBtn.addEventListener('click', openDeposit);
 
-    return {
-        reward,
-        winningCells
-    };
-
-}
-
-// =========================
-// 7. HIỆU ỨNG TRÚNG THƯỞNG
-// =========================
-
-function celebration() {
-
-    document.getElementById("message").textContent =
-        "🎉 CHÚC MỪNG! TRÚNG THƯỞNG! 🎉";
-
-    sound(523);
-    setTimeout(() => sound(659), 150);
-    setTimeout(() => sound(784), 300);
-    setTimeout(() => sound(1046), 450);
-
-}
-
-// =========================
-// 8. QUAY GAME
-// =========================
-
-function spin() {
-
-    if (spinning || balance < bet) return;
-
-    spinning = true;
-
-    balance -= bet;
-
-    turns++;
-
-    update();
-
-    document.getElementById("message").textContent =
-        "🎰 ĐANG QUAY...";
-
-    let ticks = 0;
-
-    let timer = setInterval(() => {
-
-        drawGrid(createGrid());
-
-        sound(180, 0.04);
-
-        ticks++;
-
-        if (ticks >= 15) {
-
-            clearInterval(timer);
-
-            let grid = createGrid();
-
-            drawGrid(grid);
-
-            let result = calculateWin(grid);
-
-            result.winningCells.forEach(([r, c]) => {
-
-                document
-                    .getElementById(`cell-${r}-${c}`)
-                    ?.classList.add("win");
-
+        // Tab Switching
+        function resetTabs() {
+            [tabBank, tabEWallet, tabCard, tabHistory].forEach(tab => {
+                tab.className = "pay-tab px-3 py-2 text-xs sm:text-sm font-bold rounded-t-xl bg-purple-900/40 text-gray-300 hover:text-white border-t border-x border-purple-700/40";
             });
+            depositMainView.classList.add('hidden');
+            depositCardView.classList.add('hidden');
+            depositHistoryView.classList.add('hidden');
+        }
 
-            balance += result.reward;
+        tabBank.addEventListener('click', () => {
+            resetTabs();
+            tabBank.className = "pay-tab active-tab px-3 py-2 text-xs sm:text-sm font-bold rounded-t-xl bg-emerald-600 text-white border-t border-x border-emerald-400";
+            depositBankName.textContent = "MBBANK (Ngân Hàng Quân Đội)";
+            selectedMethod = 'Ngân Hàng (VietQR)';
+            depositMainView.classList.remove('hidden');
+        });
 
-            totalWin += result.reward;
+        tabEWallet.addEventListener('click', () => {
+            resetTabs();
+            tabEWallet.className = "pay-tab active-tab px-3 py-2 text-xs sm:text-sm font-bold rounded-t-xl bg-pink-600 text-white border-t border-x border-pink-400";
+            depositBankName.textContent = "VÍ MOMO / ZALOPAY SIÊU TỐC";
+            selectedMethod = 'Ví MoMo / ZaloPay';
+            depositMainView.classList.remove('hidden');
+        });
 
-            if (result.reward > 0) {
+        tabCard.addEventListener('click', () => {
+            resetTabs();
+            tabCard.className = "pay-tab active-tab px-3 py-2 text-xs sm:text-sm font-bold rounded-t-xl bg-amber-600 text-white border-t border-x border-amber-400";
+            selectedMethod = 'Thẻ Cào Điện Thoại';
+            depositCardView.classList.remove('hidden');
+        });
 
-                wins++;
-
-                celebration();
-
-                document.getElementById("message").textContent =
-                    "🎉 THẮNG " +
-                    result.reward.toLocaleString("vi-VN") +
-                    " XU ẢO!";
-
-            } else {
-
-                losses++;
-
-                document.getElementById("message").textContent =
-                    "CHƯA TRÚNG! THỬ LẠI NHÉ.";
-
-            }
-
-            history.unshift({
-                turn: turns,
-                bet: bet,
-                reward: result.reward
-            });
-
-            history = history.slice(0, 20);
-
+        tabHistory.addEventListener('click', () => {
+            resetTabs();
+            tabHistory.className = "pay-tab active-tab px-3 py-2 text-xs sm:text-sm font-bold rounded-t-xl bg-cyan-600 text-white border-t border-x border-cyan-400";
             renderHistory();
-            renderStats();
+            depositHistoryView.classList.remove('hidden');
+        });
 
-            spinning = false;
+        // Package selection
+        document.querySelectorAll('.pkg-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('border-amber-400', 'bg-purple-900/90'));
+                card.classList.add('border-amber-400', 'bg-purple-900/90');
+                selectedDepositAmount = parseInt(card.dataset.amount);
+                selectedDepositBonus = parseInt(card.dataset.bonus);
+                customDepositInput.value = '';
+            });
+        });
 
-            update();
+        customDepositInput.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            if (!isNaN(val) && val > 0) {
+                selectedDepositAmount = val;
+                selectedDepositBonus = val >= 5000000 ? 50 : (val >= 1000000 ? 30 : 10);
+                document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('border-amber-400', 'bg-purple-900/90'));
+            }
+        });
 
+        // Copy buttons handler
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                let textToCopy = btn.dataset.copy;
+                if (!textToCopy && btn.dataset.copyTarget) {
+                    textToCopy = document.getElementById(btn.dataset.copyTarget).textContent;
+                }
+                if (textToCopy) {
+                    const tempInput = document.createElement('input');
+                    tempInput.value = textToCopy;
+                    document.body.appendChild(tempInput);
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                    
+                    const origText = btn.textContent;
+                    btn.textContent = 'Đã chép!';
+                    setTimeout(() => btn.textContent = origText, 1500);
+                }
+            });
+        });
+
+        // Process Deposit Simulation
+        function executeDepositProcessing(methodName, amount, bonusPct) {
+            depositProcessingOverlay.classList.remove('hidden');
+            
+            setTimeout(() => {
+                depositProcessingOverlay.classList.add('hidden');
+                depositModal.classList.add('hidden');
+                
+                const bonusAmount = amount * (bonusPct / 100);
+                const totalReceived = amount + bonusAmount;
+                
+                // Add to balance
+                balance += totalReceived;
+                updateUI();
+                
+                // Audio & visual SFX
+                playSound('depositSuccess');
+                triggerCoinsBurst(80);
+                
+                // Log history item
+                const now = new Date();
+                const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
+                               now.getMinutes().toString().padStart(2, '0') + ' ' + 
+                               now.getDate() + '/' + (now.getMonth() + 1);
+                
+                transactionHistory.unshift({
+                    time: timeStr,
+                    method: methodName,
+                    amount: amount,
+                    bonus: bonusAmount,
+                    total: totalReceived,
+                    code: depositCodeDisplay.textContent
+                });
+
+                // Toast/Modal confirmation
+                showWinModal("NẠP XU THÀNH CÔNG!", `ĐÃ NẠP THÀNH CÔNG THỦ CÔNG QUA ${methodName.toUpperCase()}`, totalReceived);
+
+            }, 1500);
         }
 
-    }, 100);
+        submitDepositBtn.addEventListener('click', () => {
+            executeDepositProcessing(selectedMethod, selectedDepositAmount, selectedDepositBonus);
+        });
 
-}
+        submitCardBtn.addEventListener('click', () => {
+            const pin = document.getElementById('cardPin').value.trim();
+            const seri = document.getElementById('cardSeri').value.trim();
+            const cardErrorMsg = document.getElementById('cardErrorMsg');
+            if (!pin || !seri) {
+                cardErrorMsg.classList.remove('hidden');
+                return;
+            }
+            cardErrorMsg.classList.add('hidden');
+            const telco = document.getElementById('cardTelco').value;
+            executeDepositProcessing(`Thẻ Cào ${telco}`, 200000, 15);
+            document.getElementById('cardPin').value = '';
+            document.getElementById('cardSeri').value = '';
+        });
 
-// =========================
-// 9. LỊCH SỬ
-// =========================
-
-function renderHistory() {
-
-    let html = "";
-
-    history.forEach(item => {
-
-        html += `
-            <p>
-            Lượt ${item.turn}
-            | Cược: ${item.bet}
-            | Thắng: ${item.reward}
-            </p>
-        `;
-
-    });
-
-    document.getElementById("historyList").innerHTML =
-        html || "Chưa có dữ liệu.";
-
-}
-
-// =========================
-// 10. THỐNG KÊ
-// =========================
-
-function renderStats() {
-
-    document.getElementById("statsList").innerHTML = `
-        Tổng lượt quay: ${turns}<br>
-        Số lượt thắng: ${wins}<br>
-        Số lượt không trúng: ${losses}<br>
-        Tổng xu thắng: ${totalWin}<br>
-        Tỷ lệ thắng: ${
-            turns ? Math.round(wins / turns * 100) : 0
-        }%
-    `;
-
-}
-
-// =========================
-// 11. CÁC NÚT ĐIỀU KHIỂN
-// =========================
-
-document.getElementById("spin").onclick = spin;
-
-document.getElementById("minus").onclick = () => {
-
-    if (bet > 10) {
-        bet -= 10;
-        update();
-    }
-
-};
-
-document.getElementById("plus").onclick = () => {
-
-    if (bet < 100 && bet + 10 <= balance) {
-        bet += 10;
-        update();
-    }
-
-};
-
-document.getElementById("historyBtn").onclick = () => {
-
-    document.getElementById("history")
-        .classList.toggle("show");
-
-};
-
-document.getElementById("statsBtn").onclick = () => {
-
-    document.getElementById("stats")
-        .classList.toggle("show");
-
-};
-
-// =========================
-// 12. TOÀN MÀN HÌNH
-// =========================
-
-document.getElementById("fullBtn").onclick = async () => {
-
-    try {
-
-        if (!document.fullscreenElement) {
-
-            await document.getElementById("game")
-                .requestFullscreen();
-
-        } else {
-
-            await document.exitFullscreen();
-
+        function renderHistory() {
+            const container = document.getElementById('historyListContainer');
+            if (transactionHistory.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-xs italic text-center py-4">Chưa có giao dịch nạp tiền nào.</p>';
+                return;
+            }
+            container.innerHTML = transactionHistory.map(item => `
+                <div class="bg-black/50 p-3 rounded-xl border border-emerald-500/30 flex justify-between items-center text-xs">
+                    <div>
+                        <div class="font-bold text-emerald-300">${item.method} <span class="text-[10px] text-gray-400">(${item.code})</span></div>
+                        <div class="text-[10px] text-gray-400">${item.time}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-teko text-lg font-bold text-yellow-300">+${formatCurrency(item.total)}</div>
+                        <div class="text-[9px] text-emerald-400 font-semibold">Thành công (Thưởng +${formatCurrency(item.bonus)})</div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-    } catch (error) {
-
-        console.log(error);
-
-    }
-
-};
-
-// =========================
-// 13. KHỞI ĐỘNG GAME
-// =========================
-
-drawGrid(createGrid());
-
-update();
-
-renderStats();
-
-</script>
-
+        // Initialize on Window Load
+        window.onload = () => {
+            initReels();
+            updateUI();
+        };
+    </script>
 </body>
 </html>
